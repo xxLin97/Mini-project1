@@ -1,41 +1,46 @@
-def get_sentiment_score(tweet):
-    client = language.LanguageServiceClient()
-    document = types\
-               .Document(content=tweet,
-                         type=enums.Document.Type.PLAIN_TEXT)
-    sentiment_score = client\
-                      .analyze_sentiment(document=document)\
-                      .document_sentiment\
-                      .score
-    return sentiment_score
 
-def analyze_tweets(keyword, total_tweets):
-    score = 0
-    tweets = search_tweets(keyword,total_tweets)
-    for tweet in tweets:
-        cleaned_tweet = clean_tweets(tweet.text.encode('utf-8'))
-        sentiment_score = get_sentiment_score(cleaned_tweet)
-        score += sentiment_score
-        print('Tweet: {}'.format(cleaned_tweet))
-        print('Score: {}\n'.format(sentiment_score))
-    final_score = round((score / float(total_tweets)),2)
-    return final_score
+import argparse
 
-def send_score(final_score):
-  if final_score <= -0.25:
-    status = 'NEGATIVE'
-  elif final_score <= 0.25:
-    status = 'NEUTRAL'
-  else:
-    status = 'POSITIVE'
-  print("The atitude of"+str(keyword)+"is"+status)
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
+# [END language_sentiment_tutorial_imports]
 
 
-def main():
-  keyword=input("keyword that you want to search")
-  get_sentiment_score(result)
-  analyze_tweets(keyword,50)
-  send_score(final_score)
-    
+
+def print_result(annotations):
+    score = annotations.document_sentiment.score
+    magnitude = annotations.document_sentiment.magnitude
+
+    for index, sentence in enumerate(annotations.sentences):
+        sentence_sentiment = sentence.sentiment.score
+        print('Sentence {} has a sentiment score of {}'.format(
+            index, sentence_sentiment))
+
+    print('Overall Sentiment: score of {} with magnitude of {}'.format(
+        score, magnitude))
+    return 0
+
+def analyze(movie_review_filename):
+    """Run a sentiment analysis request on text within a passed filename."""
+    client = language.LanguageServiceClient.from_service_account_json("/media/sf_shared_folder/creds.json")
+
+    with open(movie_review_filename, 'r') analyze_sentiment review_file:
+        # Instantiates a plain text document.
+        content = review_file.read()
+
+    document = types.Document(
+        content=content,
+        type=enums.Document.Type.PLAIN_TEXT)
+    annotations = client.analyze_sentiment(document=document)
+
+    # Print the results
+    print_result(annotations)
+
+
+
+
 if __name__ == '__main__':
-    main()    
+    
+    #analyze(args.movie_review_filename)
+    analyze("/media/sf_shared_folder/reviews/bladerunner-mixed.txt")
