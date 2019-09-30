@@ -1,10 +1,9 @@
-
 import argparse
 
 from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
-# [END language_sentiment_tutorial_imports]
+
 
 
 
@@ -21,13 +20,16 @@ def print_result(annotations):
         score, magnitude))
     return 0
 
+
+
+
 def analyze(movie_review_filename):
     """Run a sentiment analysis request on text within a passed filename."""
     client = language.LanguageServiceClient.from_service_account_json("/media/sf_shared_folder/creds.json")
 
-    with open(movie_review_filename, 'r') analyze_sentiment review_file:
-        # Instantiates a plain text document.
-        content = review_file.read()
+    with open("path to tweet_file") as tweet_file:
+
+        content = tweet_file.read()
 
     document = types.Document(
         content=content,
@@ -41,6 +43,4 @@ def analyze(movie_review_filename):
 
 
 if __name__ == '__main__':
-    
-    #analyze(args.movie_review_filename)
-    analyze("/media/sf_shared_folder/reviews/bladerunner-mixed.txt")
+          analyze("path to tweet_file")
